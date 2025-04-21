@@ -56,38 +56,19 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
     <script>
-        function toFraction(exposure) {
-            if (!exposure) return null;
-
-            // "s" am Ende entfernen, falls vorhanden
-            if (typeof exposure === "string") {
-                exposure = exposure.replace(/s$/, "");
+        // Function to convert seconds to a fraction string
+        function toFraction(seconds) {
+            if (typeof seconds === "string") {
+                seconds = seconds.replace(/s$/, "");
             }
-
-            // Brüche wie "1/60"
-            if (typeof exposure === "string" && exposure.includes("/")) {
-                const [numerator, denominator] = exposure.split("/").map(Number);
-                if (!isNaN(numerator) && !isNaN(denominator)) {
-                    const value = numerator / denominator;
-                    if (value >= 1) {
-                        return `${value}s`; // z. B. 2s
-                    }
-                    return `${exposure}s`; // z. B. 1/60s
-                }
+            if (seconds > 1) {
+                return `${seconds}s`;
             }
-
-            // Wenn es eine Zahl ist (z. B. 0.016 oder "0.016")
-            const num = parseFloat(exposure);
-            if (!isNaN(num)) {
-                if (num >= 1) {
-                    return `${num}s`;
-                }
-                const reciprocal = Math.round(1 / num);
-                return `1/${reciprocal}s`;
-            }
-
-            return null;
+            if (!seconds || typeof seconds !== 'number') return null;
+            const reciprocal = Math.round(1 / seconds);
+            return reciprocal > 0 ? `1/${reciprocal}s` : `${seconds}s`;
         }
 
         document.addEventListener("DOMContentLoaded", () => {
