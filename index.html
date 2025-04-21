@@ -65,14 +65,24 @@
                 exposure = exposure.replace(/s$/, "");
             }
 
-            // Wenn es ein Bruch ist (z. B. "1/60")
+            // Brüche wie "1/60"
             if (typeof exposure === "string" && exposure.includes("/")) {
-                return `${exposure}s`;
+                const [numerator, denominator] = exposure.split("/").map(Number);
+                if (!isNaN(numerator) && !isNaN(denominator)) {
+                    const value = numerator / denominator;
+                    if (value >= 1) {
+                        return `${value}s`; // z. B. 2s
+                    }
+                    return `${exposure}s`; // z. B. 1/60s
+                }
             }
 
-            // Wenn es eine Zahl oder eine String-Zahl ist (z. B. 0.016 oder "0.016")
+            // Wenn es eine Zahl ist (z. B. 0.016 oder "0.016")
             const num = parseFloat(exposure);
-            if (!isNaN(num) && num > 0) {
+            if (!isNaN(num)) {
+                if (num >= 1) {
+                    return `${num}s`;
+                }
                 const reciprocal = Math.round(1 / num);
                 return `1/${reciprocal}s`;
             }
