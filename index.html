@@ -57,12 +57,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     <script>
-        function toFraction(seconds) {
-            if (!seconds || typeof seconds !== 'number') return null;
-            const reciprocal = Math.round(1 / seconds);
-            return reciprocal > 0 ? `1/${reciprocal}s` : `${seconds}s`;
-        }
-
+        // Load EXIF data and update captions
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("img").forEach((img) => {
                 img.addEventListener("load", () => {
@@ -80,7 +75,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutter ? `${shutterNumerator}/${shutterDenominator}` : null,
+                                shutter ? `test${shutterNumerator}/${shutterDenominator}s` : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
