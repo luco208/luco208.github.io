@@ -57,6 +57,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     <script>
+        // Function to convert shutter speed to fraction format
+        function toFraction(seconds) {
+            if (!seconds || typeof seconds !== 'number') return null;
+            const reciprocal = Math.round(1 / seconds);
+            return reciprocal > 0 ? `1/${reciprocal}s` : `${seconds}s`;
+        }
+
         // Load EXIF data and update captions
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("img").forEach((img) => {
@@ -66,8 +73,7 @@
                         const model = EXIF.getTag(this, "Model");
                         const iso = EXIF.getTag(this, "ISOSpeedRatings");
                         const shutter = EXIF.getTag(this, "ExposureTime");
-                        const shutterNumerator = EXIF.getTag(this, "ExposureTimeNumerator");
-                        const shutterDenominator = EXIF.getTag(this, "ExposureTimeDenominator");
+                        const shutterreciprocal = toFraction(shutter);
                         const aperture = EXIF.getTag(this, "FNumber");
 
                         const caption = img.nextElementSibling;
@@ -75,7 +81,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutter ? `test${shutterNumerator}/${shutterDenominator}s` : null,
+                                shutter ? `SS ${shutterreciprocal}s` : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
