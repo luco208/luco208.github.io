@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fotogalerie</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <h1>📸 Lucos Fotogalerie</h1>
-    <p>Einblicke durch meine Linse</p>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meine Fotos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body class="bg-neutral-100 text-neutral-800 font-sans">
+    <header class="text-center py-10">
+      <h1 class="text-3xl font-bold">Lucos Fotogalerie</h1>
+      <p class="text-neutral-500 mt-2">Fokus auf jedes einzelne Bild</p>
+    </header>
 
-  <main class="gallery">
-    <img src="images/photos/20250106 Lampen Balkon 2.JPG" alt="Foto 1" />
+    <main class="flex flex-col items-center gap-10 px-4 pb-20">
+    <img src="images\photos\20250106 Lampen Balkon 2.JPG" alt="Foto 1" />
     <img src="images\photos\20250116 lte2.JPG" alt="Foto 2" />
-    <img src="images/photos/20250121 lte.jpg" alt="Foto 3" />
+    <img src="images\photos\20250116 lte.JPG" alt="Foto 3" />
     <!-- Weitere Bilder hier -->
-  </main>
+</main>
 
-  <footer>
-    <p>&copy; 2025 – Lucas Oldenburg</p>
-  </footer>
+<footer class="text-center text-sm text-neutral-400 py-6">
+  &copy; 2025 – Lucas Oldenburg
+</footer>
 </body>
 </html>
