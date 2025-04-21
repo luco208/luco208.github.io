@@ -60,19 +60,24 @@
         function toFraction(exposure) {
             if (!exposure) return null;
 
-            // Wenn es ein Bruch als String ist, z. B. "1/60"
+            // "s" am Ende entfernen, falls vorhanden
+            if (typeof exposure === "string") {
+                exposure = exposure.replace(/s$/, "");
+            }
+
+            // Wenn es ein Bruch ist (z. B. "1/60")
             if (typeof exposure === "string" && exposure.includes("/")) {
                 return `${exposure}s`;
             }
 
-            // Wenn es eine Zahl ist (z. B. 0.016666...)
-            if (typeof exposure === "number") {
-                const reciprocal = Math.round(1 / exposure);
-                return reciprocal > 0 ? `1/${reciprocal}s` : `${exposure}s`;
+            // Wenn es eine Zahl oder eine String-Zahl ist (z. B. 0.016 oder "0.016")
+            const num = parseFloat(exposure);
+            if (!isNaN(num) && num > 0) {
+                const reciprocal = Math.round(1 / num);
+                return `1/${reciprocal}s`;
             }
 
-            // Fallback
-            return `${exposure}s`;
+            return null;
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -83,6 +88,7 @@
                         const model = EXIF.getTag(this, "Model");
                         const iso = EXIF.getTag(this, "ISOSpeedRatings");
                         const shutter = EXIF.getTag(this, "ExposureTime");
+                        const shutterreciprocal = toFraction(shutter);
                         const aperture = EXIF.getTag(this, "FNumber");
 
                         const caption = img.nextElementSibling;
@@ -90,7 +96,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutter ? toFraction(shutter) : null,
+                                shutter ? shutterreciprocal : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
