@@ -17,15 +17,80 @@
       <p class="text-neutral-500 mt-2">Fokus auf jedes einzelne Bild</p>
     </header>
 
-    <main class="flex flex-col items-center gap-10 px-4 pb-20">
-    <img src="images\photos\20250106 Lampen Balkon 2.JPG" alt="Foto 1" />
-    <img src="images\photos\20250116 lte2.JPG" alt="Foto 2" />
-    <img src="images\photos\20250121 lte.JPG" alt="Foto 3" />
+    <main class="flex flex-col items-center gap-20 px-4 pb-20">
+        <figure class="w-full max-w-4xl text-center">
+            <img src="images\photos\20250106 Lampen Balkon 2.JPG" alt="Foto 1" class="w-full shadow-md" />
+            <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>
+        <figure class="w-full max-w-4xl text-center">
+            <img src="images\photos\20250116 lte2.JPG" alt="Foto 2" class="w-full shadow-md" />
+            <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>
+        <figure class="w-full max-w-4xl text-center">
+            <img src="images\photos\20250121 lte.JPG" alt="Foto 3" class="w-full shadow-md" />
+            <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>  
+        <figure class="w-full max-w-4xl text-center">
+                <img src="images\photos\DSCF0366.JPG" alt="Foto 4" class="w-full shadow-md" />
+                <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>
+        <figure class="w-full max-w-4xl text-center">
+                <img src="images\photos\DSCF0415.JPG" alt="Foto 5" class="w-full shadow-md" />
+                <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>
+        <figure class="w-full max-w-4xl text-center">
+                <img src="images\photos\DSCF0422.JPG" alt="Foto 6" class="w-full shadow-md" />
+                <figcaption class="text-sm text-neutral-500 mt-2">EXIF-Infos kommen hier hin</figcaption>
+        </figure>
     <!-- Weitere Bilder hier -->
 </main>
 
 <footer class="text-center text-sm text-neutral-400 py-6">
   &copy; 2025 – Lucas Oldenburg
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("img").forEach((img) => {
+      EXIF.getData(img, function () {
+        const make = EXIF.getTag(this, "Make");
+        const model = EXIF.getTag(this, "Model");
+        const iso = EXIF.getTag(this, "ISOSpeedRatings");
+        const shutter = EXIF.getTag(this, "ExposureTime");
+        const aperture = EXIF.getTag(this, "FNumber");
+
+        const caption = img.nextElementSibling;
+        if (caption) {
+          caption.innerText = `${make || ""} ${model || ""} • ƒ/${aperture || "?"} • ${shutter || "?"}s • ISO ${iso || "?"}`;
+        }
+      });
+    });
+  });
+</script>
+<script>
+  // Lazy loading der Bilder
+  const images = document.querySelectorAll("img");
+  const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.1,
+  };
+
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.classList.remove("opacity-0");
+        observer.unobserve(img);
+      }
+    });
+  }, options);
+
+  images.forEach((img) => {
+    img.classList.add("opacity-0");
+    imageObserver.observe(img);
+  });
+</script>
 </body>
 </html>
