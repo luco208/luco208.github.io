@@ -87,7 +87,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutter ? shutterreciprocal : null,
+                                shutter ? `SS ${shutterreciprocal}` : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
