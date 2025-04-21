@@ -57,14 +57,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     <script>
-        // Function to convert shutter speed to fraction format
-        function toFraction(seconds) {
-            if (!seconds || typeof seconds !== 'number') return null;
-            const reciprocal = Math.round(1 / seconds);
-            return reciprocal > 0 ? `1/${reciprocal}s` : `${seconds}s`;
+        function toFraction(exposure) {
+            if (!exposure) return null;
+
+            // Wenn es ein Bruch als String ist, z. B. "1/60"
+            if (typeof exposure === "string" && exposure.includes("/")) {
+                return `${exposure}s`;
+            }
+
+            // Wenn es eine Zahl ist (z. B. 0.016666...)
+            if (typeof exposure === "number") {
+                const reciprocal = Math.round(1 / exposure);
+                return reciprocal > 0 ? `1/${reciprocal}s` : `${exposure}s`;
+            }
+
+            // Fallback
+            return `${exposure}s`;
         }
 
-        // Load EXIF data and update captions
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("img").forEach((img) => {
                 img.addEventListener("load", () => {
@@ -73,7 +83,6 @@
                         const model = EXIF.getTag(this, "Model");
                         const iso = EXIF.getTag(this, "ISOSpeedRatings");
                         const shutter = EXIF.getTag(this, "ExposureTime");
-                        const shutterreciprocal = toFraction(shutter);
                         const aperture = EXIF.getTag(this, "FNumber");
 
                         const caption = img.nextElementSibling;
@@ -81,7 +90,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutter ? `SS ${shutterreciprocal}s` : null,
+                                shutter ? toFraction(shutter) : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
