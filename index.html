@@ -59,7 +59,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
     <script>
         // Function to convert seconds to a fraction string
-        function toFraction(seconds) {
+        /* function toFraction(seconds) {
             if (typeof seconds === "string") {
                 seconds = seconds.replace(/s$/, "");
             }
@@ -69,7 +69,7 @@
             if (!seconds || typeof seconds !== 'number') return null;
             const reciprocal = Math.round(1 / seconds);
             return reciprocal > 0 ? `1/${reciprocal}s` : `${seconds}s`;
-        }
+        } */
 
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("img").forEach((img) => {
@@ -79,7 +79,7 @@
                         const model = EXIF.getTag(this, "Model");
                         const iso = EXIF.getTag(this, "ISOSpeedRatings");
                         const shutter = EXIF.getTag(this, "ExposureTime");
-                        const shutterreciprocal = toFraction(shutter);
+                        //const shutterreciprocal = toFraction(shutter);
                         const aperture = EXIF.getTag(this, "FNumber");
 
                         const caption = img.nextElementSibling;
@@ -87,7 +87,7 @@
                             caption.innerText = [
                                 `${make || ""} ${model || ""}`.trim(),
                                 aperture ? `ƒ/${aperture}` : null,
-                                shutterreciprocal ? `SS ${shutterreciprocal}` : null,
+                                shutter ? `SS ${shutter}` : null,
                                 iso ? `ISO ${iso}` : null,
                             ]
                                 .filter(Boolean)
